@@ -10,6 +10,27 @@ package parser;
 import java.io.*;
 
 public class MeuParser {
+    public static void main(String[] args) {
+        try {
+            if (args.length == 0) {
+                System.out.println("Uso: java -cp bin parser.MeuParser <caminho_do_arquivo.c>");
+                return;
+            }
+            // Lê o arquivo C passado como argumento
+            MeuParser parser = new MeuParser(new java.io.FileInputStream(args[0]));
+            
+            // Chama a regra principal da gramática
+            parser.Programa();
+            
+            System.out.println("\nSucesso! Nenhuma falha sintatica. O codigo C esta correto!");
+        } catch (FileNotFoundException e) {
+            System.out.println("\nErro: Arquivo nao encontrado.");
+        } catch (ParseException e) {
+            System.out.println("\nErro de Sintaxe: " + e.getMessage());
+        } catch (TokenMgrError e) {
+            System.out.println("\nErro Lexico: " + e.getMessage());
+        }
+    }
 }
 PARSER_END(MeuParser)
 
@@ -38,8 +59,8 @@ TOKEN :
 | < VOID: "void" >
 | < CHAR: "char" >
 | < FLOAT: "float" >
-| < UNSIGNED: "unsigned" > // NOVO
-| < LONG: "long" >         // NOVO
+| < UNSIGNED: "unsigned" >
+| < LONG: "long" >         
 | < RETURN: "return" >
 | < IF: "if" >
 | < ELSE: "else" >
@@ -50,30 +71,30 @@ TOKEN :
 | < CONTINUE: "continue" >
 }
 
-/* 4. OPERADORES E PONTUAÇÃO (Ordem importa!) */
+/* 4. OPERADORES E PONTUAÇÃO */
 TOKEN :
 {
-  < INCREMENT: "++" >       // NOVO (Deve vir antes do +)
-| < DECREMENT: "--" >       // NOVO (Deve vir antes do -)
-| < PLUS_ASSIGN: "+=" >     // NOVO
-| < MINUS_ASSIGN: "-=" >    // NOVO
-| < MULTIPLY_ASSIGN: "*=" > // NOVO (Deve vir antes do *)
-| < DIVIDE_ASSIGN: "/=" >   // NOVO
-| < AND: "&&" >             // Deve vir antes do &
-| < OR: "||" >              // Deve vir antes do |
-| < EQ: "==" >              // Deve vir antes do =
+  < INCREMENT: "++" >       
+| < DECREMENT: "--" >       
+| < PLUS_ASSIGN: "+=" >     
+| < MINUS_ASSIGN: "-=" >    
+| < MULTIPLY_ASSIGN: "*=" > 
+| < DIVIDE_ASSIGN: "/=" >   
+| < AND: "&&" >             
+| < OR: "||" >              
+| < EQ: "==" >              
 | < NEQ: "!=" >
-| < LTE: "<=" >             // Deve vir antes do <
-| < GTE: ">=" >             // Deve vir antes do >
+| < LTE: "<=" >             
+| < GTE: ">=" >             
 | < PLUS: "+" >
 | < MINUS: "-" >
-| < MULTIPLY: "*" >         // Multiplicação E Ponteiro (Dereference)
+| < MULTIPLY: "*" >         
 | < DIVIDE: "/" >
 | < ASSIGN: "=" >
 | < LT: "<" >
 | < GT: ">" >
-| < BITWISE_AND: "&" >      // NOVO: Endereço de memória (Ponteiro) / Bitwise
-| < BITWISE_OR: "|" >       // NOVO
+| < BITWISE_AND: "&" >      
+| < BITWISE_OR: "|" >       
 | < NOT: "!" >
 | < SEMICOLON: ";" >
 | < COMMA: "," >
@@ -93,56 +114,142 @@ TOKEN :
 | < IDENTIFIER: ["a"-"z", "A"-"Z", "_"] (["a"-"z", "A"-"Z", "_", "0"-"9"])* > 
 }
 
-/* 6. REGRA SINTÁTICA: O TESTADOR DO LÉXICO */
-void principal() :
-{
-  Token t;
-}
-{
-  (
-    t = <PREPROCESSOR> { System.out.println("Preprocessor: " + t.image); }
-  | t = <HEADER_LIB> { System.out.println("Header: " + t.image); }
-  
-  // Tipos e Palavras-chave
-  | t = <INT> { System.out.println("Keyword: " + t.image); }
-  | t = <UNSIGNED> { System.out.println("Keyword: " + t.image); }
-  | t = <LONG> { System.out.println("Keyword: " + t.image); }
-  | t = <VOID> { System.out.println("Keyword: " + t.image); }
-  | t = <RETURN> { System.out.println("Keyword: " + t.image); }
-  | t = <IF> { System.out.println("Keyword: " + t.image); }
-  | t = <ELSE> { System.out.println("Keyword: " + t.image); }
-  | t = <FOR> { System.out.println("Keyword: " + t.image); }
-  | t = <WHILE> { System.out.println("Keyword: " + t.image); }
-  
-  // Operadores
-  | t = <INCREMENT> { System.out.println("Operator: " + t.image); }
-  | t = <DECREMENT> { System.out.println("Operator: " + t.image); }
-  | t = <MULTIPLY_ASSIGN> { System.out.println("Operator: " + t.image); }
-  | t = <PLUS> { System.out.println("Operator: " + t.image); }
-  | t = <MINUS> { System.out.println("Operator: " + t.image); }
-  | t = <MULTIPLY> { System.out.println("Operator/Pointer: " + t.image); }
-  | t = <DIVIDE> { System.out.println("Operator: " + t.image); }
-  | t = <ASSIGN> { System.out.println("Operator: " + t.image); }
-  | t = <EQ> { System.out.println("Operator: " + t.image); }
-  | t = <NEQ> { System.out.println("Operator: " + t.image); }
-  | t = <LT> { System.out.println("Operator: " + t.image); }
-  | t = <LTE> { System.out.println("Operator: " + t.image); }
-  | t = <GT> { System.out.println("Operator: " + t.image); }
-  | t = <GTE> { System.out.println("Operator: " + t.image); }
-  | t = <BITWISE_AND> { System.out.println("Pointer/Address: " + t.image); }
-  
-  // Delimitadores
-  | t = <SEMICOLON> { System.out.println("Delimiter: " + t.image); }
-  | t = <COMMA> { System.out.println("Delimiter: " + t.image); }
-  | t = <LPAREN> { System.out.println("Delimiter: " + t.image); }
-  | t = <RPAREN> { System.out.println("Delimiter: " + t.image); }
-  | t = <LBRACE> { System.out.println("Delimiter: " + t.image); }
-  | t = <RBRACE> { System.out.println("Delimiter: " + t.image); }
-  
-  // Literais e Identificadores
-  | t = <INTEGER_LITERAL> { System.out.println("Integer: " + t.image); }
-  | t = <STRING_LITERAL> { System.out.println("String: " + t.image); }
-  | t = <IDENTIFIER> { System.out.println("Identifier: " + t.image); }
-  )*
+/**************************************************
+ * 6. GRAMÁTICA SINTÁTICA DA LINGUAGEM C
+ **************************************************/
+
+void Programa() : {} {
+  ( Diretiva() )*
+  ( DeclaracaoGlobal() )*
   <EOF>
+}
+
+void Diretiva() : {} {
+  <PREPROCESSOR> <HEADER_LIB>
+}
+
+void DeclaracaoGlobal() : {} {
+  TiposDeDados() (<MULTIPLY>)* <IDENTIFIER> ( InstanciarVariavel() | InstanciaFuncao() )
+}
+
+void InstanciarVariavel() : {} {
+  ( <ASSIGN> Expressao() )? ( <COMMA> (<MULTIPLY>)* <IDENTIFIER> ( <ASSIGN> Expressao() )? )* <SEMICOLON>
+}
+
+void InstanciaFuncao() : {} {
+  <LPAREN> ListaDeParametros() <RPAREN> BlocoDeDeclaracoes()
+}
+
+void ListaDeParametros() : {} {
+  ( TiposDeDados() (<MULTIPLY>)* <IDENTIFIER> ( <COMMA> TiposDeDados() (<MULTIPLY>)* <IDENTIFIER> )* )?
+}
+
+void BlocoDeDeclaracoes() : {} {
+  <LBRACE> (CorpoDaDeclaracao())* <RBRACE>
+}
+
+void CorpoDaDeclaracao() : {} {
+  // O LOOKAHEAD ajuda o parser a decidir entre declarar uma variável (ex: int x;) ou atribuir (ex: x = 1;)
+  LOOKAHEAD(TiposDeDados()) DeclaracaoLocal()
+  | AtribuicaoOuChamada()
+  | RetornoDaFuncao()
+  | If_Else()
+  | While()
+  | For()
+  | <BREAK> <SEMICOLON>
+  | <CONTINUE> <SEMICOLON>
+}
+
+void DeclaracaoLocal() : {} {
+  TiposDeDados() (<MULTIPLY>)* <IDENTIFIER> InstanciarVariavel()
+}
+
+// Lida com operações que não necessariamente terminam em ponto-e-vírgula (útil para o FOR)
+void ComandoExpressao() : {} {
+  (<MULTIPLY>)* <IDENTIFIER> (
+      <ASSIGN> Expressao()
+    | <PLUS_ASSIGN> Expressao()
+    | <MINUS_ASSIGN> Expressao()
+    | <MULTIPLY_ASSIGN> Expressao()
+    | <DIVIDE_ASSIGN> Expressao()
+    | <LPAREN> ListaDeArgumentos() <RPAREN>
+    | <INCREMENT>
+    | <DECREMENT>
+  )
+  | (<INCREMENT> | <DECREMENT>) <IDENTIFIER>
+}
+
+void AtribuicaoOuChamada() : {} {
+  ComandoExpressao() <SEMICOLON>
+}
+
+void RetornoDaFuncao() : {} {
+  <RETURN> (Expressao())? <SEMICOLON>
+}
+
+void If_Else() : {} {
+  <IF> <LPAREN> Expressao() <RPAREN> ComandoBlocoOuUnico()
+  ( LOOKAHEAD(1) <ELSE> ComandoBlocoOuUnico() )?
+}
+
+// Permite executar um bloco { } ou uma linha única após um if/for/while
+void ComandoBlocoOuUnico() : {} {
+  BlocoDeDeclaracoes() | CorpoDaDeclaracao()
+}
+
+void For() : {} {
+  <FOR> <LPAREN> (ComandoExpressao())? <SEMICOLON> (Expressao())? <SEMICOLON> (ComandoExpressao())? <RPAREN> ComandoBlocoOuUnico()
+}
+
+void While() : {} {
+  <WHILE> <LPAREN> Expressao() <RPAREN> ComandoBlocoOuUnico()
+}
+
+// Mapeia todas as combinações de tipos, incluindo o seu 'unsigned long long'
+void TiposDeDados() : {} {
+    LOOKAHEAD(3) <UNSIGNED> <LONG> <LONG>
+  | LOOKAHEAD(2) <UNSIGNED> <LONG>
+  | LOOKAHEAD(2) <UNSIGNED> <INT>
+  | <UNSIGNED>
+  | LOOKAHEAD(2) <LONG> <LONG>
+  | <LONG>
+  | <INT>
+  | <FLOAT>
+  | <CHAR>
+  | <VOID>
+}
+
+void ListaDeArgumentos() : {} {
+  (Expressao() ( <COMMA> Expressao() )*)?
+}
+
+// Hierarquia de expressões matemáticas e lógicas
+void Expressao() : {} {
+  item() (
+    ( <LT> | <GT> | <LTE> | <GTE> | <EQ> | <NEQ> | <AND> | <OR> )
+    item()
+  )*
+}
+
+void item() : {} {
+  termo() ( ( <PLUS> | <MINUS> ) termo() )*
+}
+
+void termo() : {} {
+  itemUnico() ( ( <MULTIPLY> | <DIVIDE> ) itemUnico() )*
+}
+
+void itemUnico() : {} {
+  // Lida com operadores unários de C como ponteiros (* e &) e negações (! e -)
+  ( <PLUS> | <MINUS> | <NOT> | <BITWISE_AND> | <MULTIPLY> )* Item()
+}
+
+void Item() : {} {
+    <INTEGER_LITERAL>
+  | <STRING_LITERAL>
+  // LOOKAHEAD para não confundir uma chamada de função 'nome()' com uma variável solta 'nome'
+  | LOOKAHEAD(2) <IDENTIFIER> <LPAREN> ListaDeArgumentos() <RPAREN>
+  | LOOKAHEAD(2) <IDENTIFIER> <LBRACKET> Expressao() <RBRACKET>
+  | <IDENTIFIER>
+  | <LPAREN> Expressao() <RPAREN>
 }
