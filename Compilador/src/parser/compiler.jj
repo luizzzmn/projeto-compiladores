@@ -1,0 +1,148 @@
+options
+{
+  static = false;
+  DEBUG_PARSER = false;
+}
+
+PARSER_BEGIN(MeuParser)
+package parser;
+
+import java.io.*;
+
+public class MeuParser {
+}
+PARSER_END(MeuParser)
+
+/* 1. CARACTERES IGNORADOS E COMENTÁRIOS */
+SKIP :
+{
+  " "
+| "\r"
+| "\t"
+| "\n"
+| < "//" (~["\n", "\r"])* ("\n" | "\r" | "\r\n") >
+| < "/*" (~["*"])* "*" ("*" | ~["*", "/"] (~["*"])* "*")* "/" >
+}
+
+/* 2. DIRETIVAS DE PRÉ-PROCESSADOR */
+TOKEN :
+{
+  < PREPROCESSOR: "#" (["a"-"z", "A"-"Z"])+ > 
+| < HEADER_LIB: "<" (["a"-"z", "A"-"Z", ".", "_"])+ ">" > 
+}
+
+/* 3. PALAVRAS RESERVADAS DO C */
+TOKEN :
+{
+  < INT: "int" >
+| < VOID: "void" >
+| < CHAR: "char" >
+| < FLOAT: "float" >
+| < UNSIGNED: "unsigned" > // NOVO
+| < LONG: "long" >         // NOVO
+| < RETURN: "return" >
+| < IF: "if" >
+| < ELSE: "else" >
+| < WHILE: "while" >
+| < FOR: "for" >
+| < DO: "do" >
+| < BREAK: "break" >
+| < CONTINUE: "continue" >
+}
+
+/* 4. OPERADORES E PONTUAÇÃO (Ordem importa!) */
+TOKEN :
+{
+  < INCREMENT: "++" >       // NOVO (Deve vir antes do +)
+| < DECREMENT: "--" >       // NOVO (Deve vir antes do -)
+| < PLUS_ASSIGN: "+=" >     // NOVO
+| < MINUS_ASSIGN: "-=" >    // NOVO
+| < MULTIPLY_ASSIGN: "*=" > // NOVO (Deve vir antes do *)
+| < DIVIDE_ASSIGN: "/=" >   // NOVO
+| < AND: "&&" >             // Deve vir antes do &
+| < OR: "||" >              // Deve vir antes do |
+| < EQ: "==" >              // Deve vir antes do =
+| < NEQ: "!=" >
+| < LTE: "<=" >             // Deve vir antes do <
+| < GTE: ">=" >             // Deve vir antes do >
+| < PLUS: "+" >
+| < MINUS: "-" >
+| < MULTIPLY: "*" >         // Multiplicação E Ponteiro (Dereference)
+| < DIVIDE: "/" >
+| < ASSIGN: "=" >
+| < LT: "<" >
+| < GT: ">" >
+| < BITWISE_AND: "&" >      // NOVO: Endereço de memória (Ponteiro) / Bitwise
+| < BITWISE_OR: "|" >       // NOVO
+| < NOT: "!" >
+| < SEMICOLON: ";" >
+| < COMMA: "," >
+| < LPAREN: "(" >
+| < RPAREN: ")" >
+| < LBRACE: "{" >
+| < RBRACE: "}" >
+| < LBRACKET: "[" >
+| < RBRACKET: "]" >
+}
+
+/* 5. LITERAIS E IDENTIFICADORES */
+TOKEN :
+{
+  < INTEGER_LITERAL: (["0"-"9"])+ >
+| < STRING_LITERAL: "\"" (~["\"", "\n", "\r"])* "\"" > 
+| < IDENTIFIER: ["a"-"z", "A"-"Z", "_"] (["a"-"z", "A"-"Z", "_", "0"-"9"])* > 
+}
+
+/* 6. REGRA SINTÁTICA: O TESTADOR DO LÉXICO */
+void principal() :
+{
+  Token t;
+}
+{
+  (
+    t = <PREPROCESSOR> { System.out.println("Preprocessor: " + t.image); }
+  | t = <HEADER_LIB> { System.out.println("Header: " + t.image); }
+  
+  // Tipos e Palavras-chave
+  | t = <INT> { System.out.println("Keyword: " + t.image); }
+  | t = <UNSIGNED> { System.out.println("Keyword: " + t.image); }
+  | t = <LONG> { System.out.println("Keyword: " + t.image); }
+  | t = <VOID> { System.out.println("Keyword: " + t.image); }
+  | t = <RETURN> { System.out.println("Keyword: " + t.image); }
+  | t = <IF> { System.out.println("Keyword: " + t.image); }
+  | t = <ELSE> { System.out.println("Keyword: " + t.image); }
+  | t = <FOR> { System.out.println("Keyword: " + t.image); }
+  | t = <WHILE> { System.out.println("Keyword: " + t.image); }
+  
+  // Operadores
+  | t = <INCREMENT> { System.out.println("Operator: " + t.image); }
+  | t = <DECREMENT> { System.out.println("Operator: " + t.image); }
+  | t = <MULTIPLY_ASSIGN> { System.out.println("Operator: " + t.image); }
+  | t = <PLUS> { System.out.println("Operator: " + t.image); }
+  | t = <MINUS> { System.out.println("Operator: " + t.image); }
+  | t = <MULTIPLY> { System.out.println("Operator/Pointer: " + t.image); }
+  | t = <DIVIDE> { System.out.println("Operator: " + t.image); }
+  | t = <ASSIGN> { System.out.println("Operator: " + t.image); }
+  | t = <EQ> { System.out.println("Operator: " + t.image); }
+  | t = <NEQ> { System.out.println("Operator: " + t.image); }
+  | t = <LT> { System.out.println("Operator: " + t.image); }
+  | t = <LTE> { System.out.println("Operator: " + t.image); }
+  | t = <GT> { System.out.println("Operator: " + t.image); }
+  | t = <GTE> { System.out.println("Operator: " + t.image); }
+  | t = <BITWISE_AND> { System.out.println("Pointer/Address: " + t.image); }
+  
+  // Delimitadores
+  | t = <SEMICOLON> { System.out.println("Delimiter: " + t.image); }
+  | t = <COMMA> { System.out.println("Delimiter: " + t.image); }
+  | t = <LPAREN> { System.out.println("Delimiter: " + t.image); }
+  | t = <RPAREN> { System.out.println("Delimiter: " + t.image); }
+  | t = <LBRACE> { System.out.println("Delimiter: " + t.image); }
+  | t = <RBRACE> { System.out.println("Delimiter: " + t.image); }
+  
+  // Literais e Identificadores
+  | t = <INTEGER_LITERAL> { System.out.println("Integer: " + t.image); }
+  | t = <STRING_LITERAL> { System.out.println("String: " + t.image); }
+  | t = <IDENTIFIER> { System.out.println("Identifier: " + t.image); }
+  )*
+  <EOF>
+}
