@@ -17,18 +17,18 @@ public class MeuParser {
                 return;
             }
             // Lê o arquivo C passado como argumento
-            MeuParser parser = new MeuParser(new java.io.FileInputStream(args[0]));
+            MeuParser analisador = new MeuParser(new java.io.FileInputStream(args[0]));
             
             // Chama a regra principal da gramática
-            parser.Programa();
+            analisador.Programa();
             
             System.out.println("\nSucesso! Nenhuma falha sintatica. O codigo C esta correto!");
-        } catch (FileNotFoundException e) {
+        } catch (FileNotFoundException excecao) {
             System.out.println("\nErro: Arquivo nao encontrado.");
-        } catch (ParseException e) {
-            System.out.println("\nErro de Sintaxe: " + e.getMessage());
-        } catch (TokenMgrError e) {
-            System.out.println("\nErro Lexico: " + e.getMessage());
+        } catch (ParseException excecao) {
+            System.out.println("\nErro de Sintaxe: " + excecao.getMessage());
+        } catch (TokenMgrError excecao) {
+            System.out.println("\nErro Lexico: " + excecao.getMessage());
         }
     }
 }
@@ -48,70 +48,70 @@ SKIP :
 /* 2. DIRETIVAS DE PRÉ-PROCESSADOR */
 TOKEN :
 {
-  < PREPROCESSOR: "#" (["a"-"z", "A"-"Z"])+ > 
-| < HEADER_LIB: "<" (["a"-"z", "A"-"Z", ".", "_"])+ ">" > 
+  < PRE_PROCESSADOR: "#" (["a"-"z", "A"-"Z"])+ > 
+| < BIBLIOTECA_CABECALHO: "<" (["a"-"z", "A"-"Z", ".", "_"])+ ">" > 
 }
 
 /* 3. PALAVRAS RESERVADAS DO C */
 TOKEN :
 {
-  < INT: "int" >
-| < VOID: "void" >
-| < CHAR: "char" >
-| < FLOAT: "float" >
-| < UNSIGNED: "unsigned" >
-| < LONG: "long" >         
-| < RETURN: "return" >
-| < IF: "if" >
-| < ELSE: "else" >
-| < WHILE: "while" >
-| < FOR: "for" >
-| < DO: "do" >
-| < BREAK: "break" >
-| < CONTINUE: "continue" >
+  < INTEIRO: "int" >
+| < VAZIO: "void" >
+| < CARACTERE: "char" >
+| < FLUTUANTE: "float" >
+| < SEM_SINAL: "unsigned" >
+| < LONGO: "long" >         
+| < RETORNO: "return" >
+| < SE: "if" >
+| < SENAO: "else" >
+| < ENQUANTO: "while" >
+| < PARA: "for" >
+| < FACA: "do" >
+| < PARE: "break" >
+| < CONTINUAR: "continue" >
 }
 
 /* 4. OPERADORES E PONTUAÇÃO */
 TOKEN :
 {
-  < INCREMENT: "++" >       
-| < DECREMENT: "--" >       
-| < PLUS_ASSIGN: "+=" >     
-| < MINUS_ASSIGN: "-=" >    
-| < MULTIPLY_ASSIGN: "*=" > 
-| < DIVIDE_ASSIGN: "/=" >   
-| < AND: "&&" >             
-| < OR: "||" >              
-| < EQ: "==" >              
-| < NEQ: "!=" >
-| < LTE: "<=" >             
-| < GTE: ">=" >             
-| < PLUS: "+" >
-| < MINUS: "-" >
-| < MULTIPLY: "*" >         
-| < DIVIDE: "/" >
-| < ASSIGN: "=" >
-| < LT: "<" >
-| < GT: ">" >
-| < BITWISE_AND: "&" >      
-| < BITWISE_OR: "|" >       
-| < NOT: "!" >
-| < SEMICOLON: ";" >
-| < COMMA: "," >
-| < LPAREN: "(" >
-| < RPAREN: ")" >
-| < LBRACE: "{" >
-| < RBRACE: "}" >
-| < LBRACKET: "[" >
-| < RBRACKET: "]" >
+  < INCREMENTO: "++" >        
+| < DECREMENTO: "--" >        
+| < ATRIBUICAO_SOMA: "+=" >      
+| < ATRIBUICAO_SUBTRACAO: "-=" >    
+| < ATRIBUICAO_MULTIPLICACAO: "*=" >  
+| < ATRIBUICAO_DIVISAO: "/=" >    
+| < E_LOGICO: "&&" >              
+| < OU_LOGICO: "||" >              
+| < IGUAL: "==" >              
+| < DIFERENTE: "!=" >
+| < MENOR_IGUAL: "<=" >              
+| < MAIOR_IGUAL: ">=" >              
+| < MAIS: "+" >
+| < MENOS: "-" >
+| < MULTIPLICACAO: "*" >          
+| < DIVISAO: "/" >
+| < ATRIBUICAO: "=" >
+| < MENOR: "<" >
+| < MAIOR: ">" >
+| < E_BIT_A_BIT: "&" >       
+| < OU_BIT_A_BIT: "|" >        
+| < NAO: "!" >
+| < PONTO_E_VIRGULA: ";" >
+| < VIRGULA: "," >
+| < ABRE_PARENTESES: "(" >
+| < FECHA_PARENTESES: ")" >
+| < ABRE_CHAVES: "{" >
+| < FECHA_CHAVES: "}" >
+| < ABRE_COLCHETES: "[" >
+| < FECHA_COLCHETES: "]" >
 }
 
 /* 5. LITERAIS E IDENTIFICADORES */
 TOKEN :
 {
-  < INTEGER_LITERAL: (["0"-"9"])+ >
-| < STRING_LITERAL: "\"" (~["\"", "\n", "\r"])* "\"" > 
-| < IDENTIFIER: ["a"-"z", "A"-"Z", "_"] (["a"-"z", "A"-"Z", "_", "0"-"9"])* > 
+  < LITERAL_INTEIRO: (["0"-"9"])+ >
+| < LITERAL_TEXTO: "\"" (~["\"", "\n", "\r"])* "\"" > 
+| < IDENTIFICADOR: ["a"-"z", "A"-"Z", "_"] (["a"-"z", "A"-"Z", "_", "0"-"9"])* > 
 }
 
 /**************************************************
@@ -125,27 +125,27 @@ void Programa() : {} {
 }
 
 void Diretiva() : {} {
-  <PREPROCESSOR> <HEADER_LIB>
+  <PRE_PROCESSADOR> <BIBLIOTECA_CABECALHO>
 }
 
 void DeclaracaoGlobal() : {} {
-  TiposDeDados() (<MULTIPLY>)* <IDENTIFIER> ( InstanciarVariavel() | InstanciaFuncao() )
+  TiposDeDados() (<MULTIPLICACAO>)* <IDENTIFICADOR> ( InstanciarVariavel() | InstanciaFuncao() )
 }
 
 void InstanciarVariavel() : {} {
-  ( <ASSIGN> Expressao() )? ( <COMMA> (<MULTIPLY>)* <IDENTIFIER> ( <ASSIGN> Expressao() )? )* <SEMICOLON>
+  ( <ATRIBUICAO> Expressao() )? ( <VIRGULA> (<MULTIPLICACAO>)* <IDENTIFICADOR> ( <ATRIBUICAO> Expressao() )? )* <PONTO_E_VIRGULA>
 }
 
 void InstanciaFuncao() : {} {
-  <LPAREN> ListaDeParametros() <RPAREN> BlocoDeDeclaracoes()
+  <ABRE_PARENTESES> ListaDeParametros() <FECHA_PARENTESES> BlocoDeDeclaracoes()
 }
 
 void ListaDeParametros() : {} {
-  ( TiposDeDados() (<MULTIPLY>)* <IDENTIFIER> ( <COMMA> TiposDeDados() (<MULTIPLY>)* <IDENTIFIER> )* )?
+  ( TiposDeDados() (<MULTIPLICACAO>)* <IDENTIFICADOR> ( <VIRGULA> TiposDeDados() (<MULTIPLICACAO>)* <IDENTIFICADOR> )* )?
 }
 
 void BlocoDeDeclaracoes() : {} {
-  <LBRACE> (CorpoDaDeclaracao())* <RBRACE>
+  <ABRE_CHAVES> (CorpoDaDeclaracao())* <FECHA_CHAVES>
 }
 
 void CorpoDaDeclaracao() : {} {
@@ -153,43 +153,43 @@ void CorpoDaDeclaracao() : {} {
   LOOKAHEAD(TiposDeDados()) DeclaracaoLocal()
   | AtribuicaoOuChamada()
   | RetornoDaFuncao()
-  | If_Else()
-  | While()
-  | For()
-  | <BREAK> <SEMICOLON>
-  | <CONTINUE> <SEMICOLON>
+  | Se_Senao()
+  | Enquanto()
+  | Para()
+  | <PARE> <PONTO_E_VIRGULA>
+  | <CONTINUAR> <PONTO_E_VIRGULA>
 }
 
 void DeclaracaoLocal() : {} {
-  TiposDeDados() (<MULTIPLY>)* <IDENTIFIER> InstanciarVariavel()
+  TiposDeDados() (<MULTIPLICACAO>)* <IDENTIFICADOR> InstanciarVariavel()
 }
 
 // Lida com operações que não necessariamente terminam em ponto-e-vírgula (útil para o FOR)
 void ComandoExpressao() : {} {
-  (<MULTIPLY>)* <IDENTIFIER> (
-      <ASSIGN> Expressao()
-    | <PLUS_ASSIGN> Expressao()
-    | <MINUS_ASSIGN> Expressao()
-    | <MULTIPLY_ASSIGN> Expressao()
-    | <DIVIDE_ASSIGN> Expressao()
-    | <LPAREN> ListaDeArgumentos() <RPAREN>
-    | <INCREMENT>
-    | <DECREMENT>
+  (<MULTIPLICACAO>)* <IDENTIFICADOR> (
+      <ATRIBUICAO> Expressao()
+    | <ATRIBUICAO_SOMA> Expressao()
+    | <ATRIBUICAO_SUBTRACAO> Expressao()
+    | <ATRIBUICAO_MULTIPLICACAO> Expressao()
+    | <ATRIBUICAO_DIVISAO> Expressao()
+    | <ABRE_PARENTESES> ListaDeArgumentos() <FECHA_PARENTESES>
+    | <INCREMENTO>
+    | <DECREMENTO>
   )
-  | (<INCREMENT> | <DECREMENT>) <IDENTIFIER>
+  | (<INCREMENTO> | <DECREMENTO>) <IDENTIFICADOR>
 }
 
 void AtribuicaoOuChamada() : {} {
-  ComandoExpressao() <SEMICOLON>
+  ComandoExpressao() <PONTO_E_VIRGULA>
 }
 
 void RetornoDaFuncao() : {} {
-  <RETURN> (Expressao())? <SEMICOLON>
+  <RETORNO> (Expressao())? <PONTO_E_VIRGULA>
 }
 
-void If_Else() : {} {
-  <IF> <LPAREN> Expressao() <RPAREN> ComandoBlocoOuUnico()
-  ( LOOKAHEAD(1) <ELSE> ComandoBlocoOuUnico() )?
+void Se_Senao() : {} {
+  <SE> <ABRE_PARENTESES> Expressao() <FECHA_PARENTESES> ComandoBlocoOuUnico()
+  ( LOOKAHEAD(1) <SENAO> ComandoBlocoOuUnico() )?
 }
 
 // Permite executar um bloco { } ou uma linha única após um if/for/while
@@ -197,59 +197,59 @@ void ComandoBlocoOuUnico() : {} {
   BlocoDeDeclaracoes() | CorpoDaDeclaracao()
 }
 
-void For() : {} {
-  <FOR> <LPAREN> (ComandoExpressao())? <SEMICOLON> (Expressao())? <SEMICOLON> (ComandoExpressao())? <RPAREN> ComandoBlocoOuUnico()
+void Para() : {} {
+  <PARA> <ABRE_PARENTESES> (ComandoExpressao())? <PONTO_E_VIRGULA> (Expressao())? <PONTO_E_VIRGULA> (ComandoExpressao())? <FECHA_PARENTESES> ComandoBlocoOuUnico()
 }
 
-void While() : {} {
-  <WHILE> <LPAREN> Expressao() <RPAREN> ComandoBlocoOuUnico()
+void Enquanto() : {} {
+  <ENQUANTO> <ABRE_PARENTESES> Expressao() <FECHA_PARENTESES> ComandoBlocoOuUnico()
 }
 
 // Mapeia todas as combinações de tipos, incluindo o seu 'unsigned long long'
 void TiposDeDados() : {} {
-    LOOKAHEAD(3) <UNSIGNED> <LONG> <LONG>
-  | LOOKAHEAD(2) <UNSIGNED> <LONG>
-  | LOOKAHEAD(2) <UNSIGNED> <INT>
-  | <UNSIGNED>
-  | LOOKAHEAD(2) <LONG> <LONG>
-  | <LONG>
-  | <INT>
-  | <FLOAT>
-  | <CHAR>
-  | <VOID>
+    LOOKAHEAD(3) <SEM_SINAL> <LONGO> <LONGO>
+  | LOOKAHEAD(2) <SEM_SINAL> <LONGO>
+  | LOOKAHEAD(2) <SEM_SINAL> <INTEIRO>
+  | <SEM_SINAL>
+  | LOOKAHEAD(2) <LONGO> <LONGO>
+  | <LONGO>
+  | <INTEIRO>
+  | <FLUTUANTE>
+  | <CARACTERE>
+  | <VAZIO>
 }
 
 void ListaDeArgumentos() : {} {
-  (Expressao() ( <COMMA> Expressao() )*)?
+  (Expressao() ( <VIRGULA> Expressao() )*)?
 }
 
 // Hierarquia de expressões matemáticas e lógicas
 void Expressao() : {} {
   item() (
-    ( <LT> | <GT> | <LTE> | <GTE> | <EQ> | <NEQ> | <AND> | <OR> )
+    ( <MENOR> | <MAIOR> | <MENOR_IGUAL> | <MAIOR_IGUAL> | <IGUAL> | <DIFERENTE> | <E_LOGICO> | <OU_LOGICO> )
     item()
   )*
 }
 
 void item() : {} {
-  termo() ( ( <PLUS> | <MINUS> ) termo() )*
+  termo() ( ( <MAIS> | <MENOS> ) termo() )*
 }
 
 void termo() : {} {
-  itemUnico() ( ( <MULTIPLY> | <DIVIDE> ) itemUnico() )*
+  itemUnico() ( ( <MULTIPLICACAO> | <DIVISAO> ) itemUnico() )*
 }
 
 void itemUnico() : {} {
   // Lida com operadores unários de C como ponteiros (* e &) e negações (! e -)
-  ( <PLUS> | <MINUS> | <NOT> | <BITWISE_AND> | <MULTIPLY> )* Item()
+  ( <MAIS> | <MENOS> | <NAO> | <E_BIT_A_BIT> | <MULTIPLICACAO> )* Item()
 }
 
 void Item() : {} {
-    <INTEGER_LITERAL>
-  | <STRING_LITERAL>
+    <LITERAL_INTEIRO>
+  | <LITERAL_TEXTO>
   // LOOKAHEAD para não confundir uma chamada de função 'nome()' com uma variável solta 'nome'
-  | LOOKAHEAD(2) <IDENTIFIER> <LPAREN> ListaDeArgumentos() <RPAREN>
-  | LOOKAHEAD(2) <IDENTIFIER> <LBRACKET> Expressao() <RBRACKET>
-  | <IDENTIFIER>
-  | <LPAREN> Expressao() <RPAREN>
+  | LOOKAHEAD(2) <IDENTIFICADOR> <ABRE_PARENTESES> ListaDeArgumentos() <FECHA_PARENTESES>
+  | LOOKAHEAD(2) <IDENTIFICADOR> <ABRE_COLCHETES> Expressao() <FECHA_COLCHETES>
+  | <IDENTIFICADOR>
+  | <ABRE_PARENTESES> Expressao() <FECHA_PARENTESES>
 }
