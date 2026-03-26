@@ -81,11 +81,11 @@ public interface MeuParserConstants {
   /** RegularExpression Id. */
   int MAIOR = 41;
   /** RegularExpression Id. */
-  int E_BIT_A_BIT = 42;
+  int E_COMERCIAL = 42;
   /** RegularExpression Id. */
   int OU_BIT_A_BIT = 43;
   /** RegularExpression Id. */
-  int NAO = 44;
+  int NEGACAO = 44;
   /** RegularExpression Id. */
   int PONTO_E_VIRGULA = 45;
   /** RegularExpression Id. */

@@ -93,9 +93,9 @@ TOKEN :
 | < ATRIBUICAO: "=" >
 | < MENOR: "<" >
 | < MAIOR: ">" >
-| < E_BIT_A_BIT: "&" >       
+| < E_COMERCIAL: "&" >       
 | < OU_BIT_A_BIT: "|" >        
-| < NAO: "!" >
+| < NEGACAO: "!" >
 | < PONTO_E_VIRGULA: ";" >
 | < VIRGULA: "," >
 | < ABRE_PARENTESES: "(" >
@@ -155,7 +155,7 @@ void BlocoDeDeclaracoes() : {} {
 }
 
 void CorpoDaDeclaracao() : {} {
-  // O LOOKAHEAD ajuda o parser a decidir entre declarar uma variável (ex: int x;) ou atribuir (ex: x = 1;)
+  // O LOOKAHEAD ajuda o parser a decidir entre declarar uma variável
     LOOKAHEAD(TiposDeDados()) DeclaracaoLocal()
   | AtribuicaoOuChamada()
   | RetornoDaFuncao()
@@ -259,7 +259,7 @@ void termo() : {} {
 
 void itemUnico() : {} {
   // Lida com operadores unários de C como ponteiros (* e &) e negações (! e -)
-  ( <MAIS> | <MENOS> | <NAO> | <E_BIT_A_BIT> | <ASTERISCO> )* Item()
+  ( <MAIS> | <MENOS> | <NEGACAO> | <E_COMERCIAL> | <ASTERISCO> )* Item()
 }
 
 void Item() : {} {
@@ -272,3 +272,6 @@ void Item() : {} {
   | <IDENTIFICADOR>
   | <ABRE_PARENTESES> Expressao() <FECHA_PARENTESES>
 }
+
+// exemplo de expressão
+// -1 * 3 + 4.5

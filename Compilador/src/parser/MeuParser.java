@@ -390,8 +390,8 @@ public class MeuParser implements MeuParserConstants {
     case MAIS:
     case MENOS:
     case ASTERISCO:
-    case E_BIT_A_BIT:
-    case NAO:
+    case E_COMERCIAL:
+    case NEGACAO:
     case ABRE_PARENTESES:
     case LITERAL_INTEIRO:
     case LITERAL_FLUTUANTE:
@@ -490,8 +490,8 @@ public class MeuParser implements MeuParserConstants {
     case MAIS:
     case MENOS:
     case ASTERISCO:
-    case E_BIT_A_BIT:
-    case NAO:
+    case E_COMERCIAL:
+    case NEGACAO:
     case ABRE_PARENTESES:
     case LITERAL_INTEIRO:
     case LITERAL_FLUTUANTE:
@@ -593,8 +593,8 @@ public class MeuParser implements MeuParserConstants {
     case MAIS:
     case MENOS:
     case ASTERISCO:
-    case E_BIT_A_BIT:
-    case NAO:
+    case E_COMERCIAL:
+    case NEGACAO:
     case ABRE_PARENTESES:
     case LITERAL_INTEIRO:
     case LITERAL_FLUTUANTE:
@@ -740,8 +740,8 @@ public class MeuParser implements MeuParserConstants {
       case MAIS:
       case MENOS:
       case ASTERISCO:
-      case E_BIT_A_BIT:
-      case NAO:
+      case E_COMERCIAL:
+      case NEGACAO:
         ;
         break;
       default:
@@ -755,11 +755,11 @@ public class MeuParser implements MeuParserConstants {
       case MENOS:
         jj_consume_token(MENOS);
         break;
-      case NAO:
-        jj_consume_token(NAO);
+      case NEGACAO:
+        jj_consume_token(NEGACAO);
         break;
-      case E_BIT_A_BIT:
-        jj_consume_token(E_BIT_A_BIT);
+      case E_COMERCIAL:
+        jj_consume_token(E_COMERCIAL);
         break;
       case ASTERISCO:
         jj_consume_token(ASTERISCO);
