@@ -45,10 +45,10 @@ public class MeuParser implements MeuParserConstants {
     label_2:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-      case INTEIRO:
-      case VAZIO:
+      case INT:
+      case VOID:
       case CARACTERE:
-      case FLUTUANTE:
+      case FLOAT:
       case SEM_SINAL:
       case LONGO:
         ;
@@ -72,14 +72,14 @@ public class MeuParser implements MeuParserConstants {
     label_3:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-      case MULTIPLICACAO:
+      case ASTERISCO:
         ;
         break;
       default:
         jj_la1[2] = jj_gen;
         break label_3;
       }
-      jj_consume_token(MULTIPLICACAO);
+      jj_consume_token(ASTERISCO);
     }
     jj_consume_token(IDENTIFICADOR);
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -122,14 +122,14 @@ public class MeuParser implements MeuParserConstants {
       label_5:
       while (true) {
         switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-        case MULTIPLICACAO:
+        case ASTERISCO:
           ;
           break;
         default:
           jj_la1[6] = jj_gen;
           break label_5;
         }
-        jj_consume_token(MULTIPLICACAO);
+        jj_consume_token(ASTERISCO);
       }
       jj_consume_token(IDENTIFICADOR);
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -154,24 +154,24 @@ public class MeuParser implements MeuParserConstants {
 
   final public void ListaDeParametros() throws ParseException {
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-    case INTEIRO:
-    case VAZIO:
+    case INT:
+    case VOID:
     case CARACTERE:
-    case FLUTUANTE:
+    case FLOAT:
     case SEM_SINAL:
     case LONGO:
       TiposDeDados();
       label_6:
       while (true) {
         switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-        case MULTIPLICACAO:
+        case ASTERISCO:
           ;
           break;
         default:
           jj_la1[8] = jj_gen;
           break label_6;
         }
-        jj_consume_token(MULTIPLICACAO);
+        jj_consume_token(ASTERISCO);
       }
       jj_consume_token(IDENTIFICADOR);
       label_7:
@@ -189,14 +189,14 @@ public class MeuParser implements MeuParserConstants {
         label_8:
         while (true) {
           switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-          case MULTIPLICACAO:
+          case ASTERISCO:
             ;
             break;
           default:
             jj_la1[10] = jj_gen;
             break label_8;
           }
-          jj_consume_token(MULTIPLICACAO);
+          jj_consume_token(ASTERISCO);
         }
         jj_consume_token(IDENTIFICADOR);
       }
@@ -212,21 +212,22 @@ public class MeuParser implements MeuParserConstants {
     label_9:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-      case INTEIRO:
-      case VAZIO:
+      case INT:
+      case VOID:
       case CARACTERE:
-      case FLUTUANTE:
+      case FLOAT:
       case SEM_SINAL:
       case LONGO:
       case RETORNO:
       case SE:
-      case ENQUANTO:
-      case PARA:
+      case WHILE:
+      case FOR:
+      case DO:
       case PARE:
       case CONTINUAR:
       case INCREMENTO:
       case DECREMENTO:
-      case MULTIPLICACAO:
+      case ASTERISCO:
       case IDENTIFICADOR:
         ;
         break;
@@ -246,7 +247,7 @@ public class MeuParser implements MeuParserConstants {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case INCREMENTO:
       case DECREMENTO:
-      case MULTIPLICACAO:
+      case ASTERISCO:
       case IDENTIFICADOR:
         AtribuicaoOuChamada();
         break;
@@ -256,11 +257,14 @@ public class MeuParser implements MeuParserConstants {
       case SE:
         Se_Senao();
         break;
-      case ENQUANTO:
-        Enquanto();
+      case WHILE:
+        While();
         break;
-      case PARA:
-        Para();
+      case FOR:
+        For();
+        break;
+      case DO:
+        DoWhile();
         break;
       case PARE:
         jj_consume_token(PARE);
@@ -283,14 +287,14 @@ public class MeuParser implements MeuParserConstants {
     label_10:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-      case MULTIPLICACAO:
+      case ASTERISCO:
         ;
         break;
       default:
         jj_la1[14] = jj_gen;
         break label_10;
       }
-      jj_consume_token(MULTIPLICACAO);
+      jj_consume_token(ASTERISCO);
     }
     jj_consume_token(IDENTIFICADOR);
     InstanciarVariavel();
@@ -299,19 +303,19 @@ public class MeuParser implements MeuParserConstants {
 // Lida com operações que não necessariamente terminam em ponto-e-vírgula (útil para o FOR)
   final public void ComandoExpressao() throws ParseException {
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-    case MULTIPLICACAO:
+    case ASTERISCO:
     case IDENTIFICADOR:
       label_11:
       while (true) {
         switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-        case MULTIPLICACAO:
+        case ASTERISCO:
           ;
           break;
         default:
           jj_la1[15] = jj_gen;
           break label_11;
         }
-        jj_consume_token(MULTIPLICACAO);
+        jj_consume_token(ASTERISCO);
       }
       jj_consume_token(IDENTIFICADOR);
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -385,11 +389,12 @@ public class MeuParser implements MeuParserConstants {
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case MAIS:
     case MENOS:
-    case MULTIPLICACAO:
+    case ASTERISCO:
     case E_BIT_A_BIT:
     case NAO:
     case ABRE_PARENTESES:
     case LITERAL_INTEIRO:
+    case LITERAL_FLUTUANTE:
     case LITERAL_TEXTO:
     case IDENTIFICADOR:
       Expressao();
@@ -424,21 +429,22 @@ public class MeuParser implements MeuParserConstants {
     case ABRE_CHAVES:
       BlocoDeDeclaracoes();
       break;
-    case INTEIRO:
-    case VAZIO:
+    case INT:
+    case VOID:
     case CARACTERE:
-    case FLUTUANTE:
+    case FLOAT:
     case SEM_SINAL:
     case LONGO:
     case RETORNO:
     case SE:
-    case ENQUANTO:
-    case PARA:
+    case WHILE:
+    case FOR:
+    case DO:
     case PARE:
     case CONTINUAR:
     case INCREMENTO:
     case DECREMENTO:
-    case MULTIPLICACAO:
+    case ASTERISCO:
     case IDENTIFICADOR:
       CorpoDaDeclaracao();
       break;
@@ -449,81 +455,110 @@ public class MeuParser implements MeuParserConstants {
     }
   }
 
-  final public void Para() throws ParseException {
-    jj_consume_token(PARA);
+  final public void For() throws ParseException {
+    jj_consume_token(FOR);
     jj_consume_token(ABRE_PARENTESES);
-    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-    case INCREMENTO:
-    case DECREMENTO:
-    case MULTIPLICACAO:
-    case IDENTIFICADOR:
-      ComandoExpressao();
-      break;
-    default:
-      jj_la1[22] = jj_gen;
-      ;
+    if (jj_2_2(2147483647)) {
+      DeclaracaoLocal();
+    } else {
+      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      case INCREMENTO:
+      case DECREMENTO:
+      case ASTERISCO:
+      case PONTO_E_VIRGULA:
+      case IDENTIFICADOR:
+        switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+        case INCREMENTO:
+        case DECREMENTO:
+        case ASTERISCO:
+        case IDENTIFICADOR:
+          ComandoExpressao();
+          break;
+        default:
+          jj_la1[22] = jj_gen;
+          ;
+        }
+        jj_consume_token(PONTO_E_VIRGULA);
+        break;
+      default:
+        jj_la1[23] = jj_gen;
+        jj_consume_token(-1);
+        throw new ParseException();
+      }
     }
-    jj_consume_token(PONTO_E_VIRGULA);
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case MAIS:
     case MENOS:
-    case MULTIPLICACAO:
+    case ASTERISCO:
     case E_BIT_A_BIT:
     case NAO:
     case ABRE_PARENTESES:
     case LITERAL_INTEIRO:
+    case LITERAL_FLUTUANTE:
     case LITERAL_TEXTO:
     case IDENTIFICADOR:
       Expressao();
       break;
     default:
-      jj_la1[23] = jj_gen;
+      jj_la1[24] = jj_gen;
       ;
     }
     jj_consume_token(PONTO_E_VIRGULA);
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case INCREMENTO:
     case DECREMENTO:
-    case MULTIPLICACAO:
+    case ASTERISCO:
     case IDENTIFICADOR:
       ComandoExpressao();
       break;
     default:
-      jj_la1[24] = jj_gen;
+      jj_la1[25] = jj_gen;
       ;
     }
     jj_consume_token(FECHA_PARENTESES);
     ComandoBlocoOuUnico();
   }
 
-  final public void Enquanto() throws ParseException {
-    jj_consume_token(ENQUANTO);
+  final public void While() throws ParseException {
+    jj_consume_token(WHILE);
     jj_consume_token(ABRE_PARENTESES);
     Expressao();
     jj_consume_token(FECHA_PARENTESES);
     ComandoBlocoOuUnico();
   }
 
+  final public void DoWhile() throws ParseException {
+    jj_consume_token(DO);
+    jj_consume_token(ABRE_CHAVES);
+    ComandoBlocoOuUnico();
+    jj_consume_token(FECHA_CHAVES);
+    jj_consume_token(WHILE);
+    jj_consume_token(ABRE_PARENTESES);
+    Expressao();
+    jj_consume_token(FECHA_PARENTESES);
+    jj_consume_token(PONTO_E_VIRGULA);
+  }
+
 // Mapeia todas as combinações de tipos, incluindo o seu 'unsigned long long'
   final public void TiposDeDados() throws ParseException {
-    if (jj_2_2(3)) {
+    if (jj_2_3(3)) {
       jj_consume_token(SEM_SINAL);
       jj_consume_token(LONGO);
-      jj_consume_token(LONGO);
-    } else if (jj_2_3(2)) {
-      jj_consume_token(SEM_SINAL);
       jj_consume_token(LONGO);
     } else if (jj_2_4(2)) {
       jj_consume_token(SEM_SINAL);
-      jj_consume_token(INTEIRO);
+      jj_consume_token(LONGO);
+    } else if (jj_2_5(2)) {
+      jj_consume_token(SEM_SINAL);
+      jj_consume_token(INT);
     } else {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case SEM_SINAL:
         jj_consume_token(SEM_SINAL);
         break;
       default:
-        jj_la1[25] = jj_gen;
-        if (jj_2_5(2)) {
+        jj_la1[26] = jj_gen;
+        if (jj_2_6(2)) {
           jj_consume_token(LONGO);
           jj_consume_token(LONGO);
         } else {
@@ -531,20 +566,20 @@ public class MeuParser implements MeuParserConstants {
           case LONGO:
             jj_consume_token(LONGO);
             break;
-          case INTEIRO:
-            jj_consume_token(INTEIRO);
+          case INT:
+            jj_consume_token(INT);
             break;
-          case FLUTUANTE:
-            jj_consume_token(FLUTUANTE);
+          case FLOAT:
+            jj_consume_token(FLOAT);
             break;
           case CARACTERE:
             jj_consume_token(CARACTERE);
             break;
-          case VAZIO:
-            jj_consume_token(VAZIO);
+          case VOID:
+            jj_consume_token(VOID);
             break;
           default:
-            jj_la1[26] = jj_gen;
+            jj_la1[27] = jj_gen;
             jj_consume_token(-1);
             throw new ParseException();
           }
@@ -557,11 +592,12 @@ public class MeuParser implements MeuParserConstants {
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case MAIS:
     case MENOS:
-    case MULTIPLICACAO:
+    case ASTERISCO:
     case E_BIT_A_BIT:
     case NAO:
     case ABRE_PARENTESES:
     case LITERAL_INTEIRO:
+    case LITERAL_FLUTUANTE:
     case LITERAL_TEXTO:
     case IDENTIFICADOR:
       Expressao();
@@ -572,7 +608,7 @@ public class MeuParser implements MeuParserConstants {
           ;
           break;
         default:
-          jj_la1[27] = jj_gen;
+          jj_la1[28] = jj_gen;
           break label_12;
         }
         jj_consume_token(VIRGULA);
@@ -580,7 +616,7 @@ public class MeuParser implements MeuParserConstants {
       }
       break;
     default:
-      jj_la1[28] = jj_gen;
+      jj_la1[29] = jj_gen;
       ;
     }
   }
@@ -602,7 +638,7 @@ public class MeuParser implements MeuParserConstants {
         ;
         break;
       default:
-        jj_la1[29] = jj_gen;
+        jj_la1[30] = jj_gen;
         break label_13;
       }
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -631,7 +667,7 @@ public class MeuParser implements MeuParserConstants {
         jj_consume_token(OU_LOGICO);
         break;
       default:
-        jj_la1[30] = jj_gen;
+        jj_la1[31] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
@@ -649,7 +685,7 @@ public class MeuParser implements MeuParserConstants {
         ;
         break;
       default:
-        jj_la1[31] = jj_gen;
+        jj_la1[32] = jj_gen;
         break label_14;
       }
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -660,7 +696,7 @@ public class MeuParser implements MeuParserConstants {
         jj_consume_token(MENOS);
         break;
       default:
-        jj_la1[32] = jj_gen;
+        jj_la1[33] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
@@ -673,23 +709,23 @@ public class MeuParser implements MeuParserConstants {
     label_15:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-      case MULTIPLICACAO:
+      case ASTERISCO:
       case DIVISAO:
         ;
         break;
       default:
-        jj_la1[33] = jj_gen;
+        jj_la1[34] = jj_gen;
         break label_15;
       }
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-      case MULTIPLICACAO:
-        jj_consume_token(MULTIPLICACAO);
+      case ASTERISCO:
+        jj_consume_token(ASTERISCO);
         break;
       case DIVISAO:
         jj_consume_token(DIVISAO);
         break;
       default:
-        jj_la1[34] = jj_gen;
+        jj_la1[35] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
@@ -703,13 +739,13 @@ public class MeuParser implements MeuParserConstants {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case MAIS:
       case MENOS:
-      case MULTIPLICACAO:
+      case ASTERISCO:
       case E_BIT_A_BIT:
       case NAO:
         ;
         break;
       default:
-        jj_la1[35] = jj_gen;
+        jj_la1[36] = jj_gen;
         break label_16;
       }
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -725,11 +761,11 @@ public class MeuParser implements MeuParserConstants {
       case E_BIT_A_BIT:
         jj_consume_token(E_BIT_A_BIT);
         break;
-      case MULTIPLICACAO:
-        jj_consume_token(MULTIPLICACAO);
+      case ASTERISCO:
+        jj_consume_token(ASTERISCO);
         break;
       default:
-        jj_la1[36] = jj_gen;
+        jj_la1[37] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
@@ -742,17 +778,20 @@ public class MeuParser implements MeuParserConstants {
     case LITERAL_INTEIRO:
       jj_consume_token(LITERAL_INTEIRO);
       break;
+    case LITERAL_FLUTUANTE:
+      jj_consume_token(LITERAL_FLUTUANTE);
+      break;
     case LITERAL_TEXTO:
       jj_consume_token(LITERAL_TEXTO);
       break;
     default:
-      jj_la1[37] = jj_gen;
-      if (jj_2_6(2)) {
+      jj_la1[38] = jj_gen;
+      if (jj_2_7(2)) {
         jj_consume_token(IDENTIFICADOR);
         jj_consume_token(ABRE_PARENTESES);
         ListaDeArgumentos();
         jj_consume_token(FECHA_PARENTESES);
-      } else if (jj_2_7(2)) {
+      } else if (jj_2_8(2)) {
         jj_consume_token(IDENTIFICADOR);
         jj_consume_token(ABRE_COLCHETES);
         Expressao();
@@ -768,7 +807,7 @@ public class MeuParser implements MeuParserConstants {
           jj_consume_token(FECHA_PARENTESES);
           break;
         default:
-          jj_la1[38] = jj_gen;
+          jj_la1[39] = jj_gen;
           jj_consume_token(-1);
           throw new ParseException();
         }
@@ -825,19 +864,42 @@ public class MeuParser implements MeuParserConstants {
     finally { jj_save(6, xla); }
   }
 
+  private boolean jj_2_8(int xla) {
+    jj_la = xla; jj_lastpos = jj_scanpos = token;
+    try { return !jj_3_8(); }
+    catch(LookaheadSuccess ls) { return true; }
+    finally { jj_save(7, xla); }
+  }
+
+  private boolean jj_3_7() {
+    if (jj_scan_token(IDENTIFICADOR)) return true;
+    if (jj_scan_token(ABRE_PARENTESES)) return true;
+    return false;
+  }
+
+  private boolean jj_3_2() {
+    if (jj_3R_17()) return true;
+    return false;
+  }
+
+  private boolean jj_3_1() {
+    if (jj_3R_17()) return true;
+    return false;
+  }
+
+  private boolean jj_3_6() {
+    if (jj_scan_token(LONGO)) return true;
+    if (jj_scan_token(LONGO)) return true;
+    return false;
+  }
+
   private boolean jj_3_5() {
-    if (jj_scan_token(LONGO)) return true;
-    if (jj_scan_token(LONGO)) return true;
+    if (jj_scan_token(SEM_SINAL)) return true;
+    if (jj_scan_token(INT)) return true;
     return false;
   }
 
   private boolean jj_3_4() {
-    if (jj_scan_token(SEM_SINAL)) return true;
-    if (jj_scan_token(INTEIRO)) return true;
-    return false;
-  }
-
-  private boolean jj_3_3() {
     if (jj_scan_token(SEM_SINAL)) return true;
     if (jj_scan_token(LONGO)) return true;
     return false;
@@ -846,15 +908,15 @@ public class MeuParser implements MeuParserConstants {
   private boolean jj_3R_17() {
     Token xsp;
     xsp = jj_scanpos;
-    if (jj_3_2()) {
-    jj_scanpos = xsp;
     if (jj_3_3()) {
     jj_scanpos = xsp;
     if (jj_3_4()) {
     jj_scanpos = xsp;
+    if (jj_3_5()) {
+    jj_scanpos = xsp;
     if (jj_scan_token(13)) {
     jj_scanpos = xsp;
-    if (jj_3_5()) {
+    if (jj_3_6()) {
     jj_scanpos = xsp;
     if (jj_scan_token(14)) {
     jj_scanpos = xsp;
@@ -877,27 +939,16 @@ public class MeuParser implements MeuParserConstants {
     return false;
   }
 
-  private boolean jj_3_2() {
+  private boolean jj_3_3() {
     if (jj_scan_token(SEM_SINAL)) return true;
     if (jj_scan_token(LONGO)) return true;
     if (jj_scan_token(LONGO)) return true;
     return false;
   }
 
-  private boolean jj_3_7() {
+  private boolean jj_3_8() {
     if (jj_scan_token(IDENTIFICADOR)) return true;
     if (jj_scan_token(ABRE_COLCHETES)) return true;
-    return false;
-  }
-
-  private boolean jj_3_6() {
-    if (jj_scan_token(IDENTIFICADOR)) return true;
-    if (jj_scan_token(ABRE_PARENTESES)) return true;
-    return false;
-  }
-
-  private boolean jj_3_1() {
-    if (jj_3R_17()) return true;
     return false;
   }
 
@@ -915,7 +966,7 @@ public class MeuParser implements MeuParserConstants {
   private boolean jj_lookingAhead = false;
   private boolean jj_semLA;
   private int jj_gen;
-  final private int[] jj_la1 = new int[39];
+  final private int[] jj_la1 = new int[40];
   static private int[] jj_la1_0;
   static private int[] jj_la1_1;
   static {
@@ -923,12 +974,12 @@ public class MeuParser implements MeuParserConstants {
       jj_la1_init_1();
    }
    private static void jj_la1_init_0() {
-      jj_la1_0 = new int[] {0x80,0x7e00,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x7e00,0x1edfe00,0x1ed8000,0x0,0x0,0x1f800000,0x1800000,0x1800000,0x0,0x20000,0x1edfe00,0x1800000,0x0,0x1800000,0x2000,0x5e00,0x0,0x0,0xe0000000,0xe0000000,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,};
+      jj_la1_0 = new int[] {0x80,0x7e00,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x7e00,0x1fdfe00,0x1fd8000,0x0,0x0,0x1f800000,0x1800000,0x1800000,0x0,0x20000,0x1fdfe00,0x1800000,0x1800000,0x0,0x1800000,0x2000,0x5e00,0x0,0x0,0xe0000000,0xe0000000,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,};
    }
    private static void jj_la1_init_1() {
-      jj_la1_1 = new int[] {0x0,0x0,0x20,0xe080,0x80,0x4000,0x20,0x80,0x20,0x4000,0x20,0x0,0x800020,0x800020,0x20,0x20,0x8080,0x0,0x800020,0xe09438,0x0,0x820020,0x800020,0xe09438,0x800020,0x0,0x0,0x4000,0xe09438,0x307,0x307,0x18,0x18,0x60,0x60,0x1438,0x1438,0x600000,0x808000,};
+      jj_la1_1 = new int[] {0x0,0x0,0x20,0xe080,0x80,0x4000,0x20,0x80,0x20,0x4000,0x20,0x0,0x2000020,0x2000020,0x20,0x20,0x8080,0x0,0x2000020,0x3609438,0x0,0x2020020,0x2000020,0x2002020,0x3609438,0x2000020,0x0,0x0,0x4000,0x3609438,0x307,0x307,0x18,0x18,0x60,0x60,0x1438,0x1438,0x1600000,0x2008000,};
    }
-  final private JJCalls[] jj_2_rtns = new JJCalls[7];
+  final private JJCalls[] jj_2_rtns = new JJCalls[8];
   private boolean jj_rescan = false;
   private int jj_gc = 0;
 
@@ -943,7 +994,7 @@ public class MeuParser implements MeuParserConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 39; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 40; i++) jj_la1[i] = -1;
     for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
@@ -958,7 +1009,7 @@ public class MeuParser implements MeuParserConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 39; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 40; i++) jj_la1[i] = -1;
     for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
@@ -969,7 +1020,7 @@ public class MeuParser implements MeuParserConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 39; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 40; i++) jj_la1[i] = -1;
     for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
@@ -980,7 +1031,7 @@ public class MeuParser implements MeuParserConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 39; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 40; i++) jj_la1[i] = -1;
     for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
@@ -990,7 +1041,7 @@ public class MeuParser implements MeuParserConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 39; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 40; i++) jj_la1[i] = -1;
     for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
@@ -1000,7 +1051,7 @@ public class MeuParser implements MeuParserConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 39; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 40; i++) jj_la1[i] = -1;
     for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
@@ -1115,12 +1166,12 @@ public class MeuParser implements MeuParserConstants {
   /** Generate ParseException. */
   public ParseException generateParseException() {
     jj_expentries.clear();
-    boolean[] la1tokens = new boolean[56];
+    boolean[] la1tokens = new boolean[58];
     if (jj_kind >= 0) {
       la1tokens[jj_kind] = true;
       jj_kind = -1;
     }
-    for (int i = 0; i < 39; i++) {
+    for (int i = 0; i < 40; i++) {
       if (jj_la1[i] == jj_gen) {
         for (int j = 0; j < 32; j++) {
           if ((jj_la1_0[i] & (1<<j)) != 0) {
@@ -1132,7 +1183,7 @@ public class MeuParser implements MeuParserConstants {
         }
       }
     }
-    for (int i = 0; i < 56; i++) {
+    for (int i = 0; i < 58; i++) {
       if (la1tokens[i]) {
         jj_expentry = new int[1];
         jj_expentry[0] = i;
@@ -1159,7 +1210,7 @@ public class MeuParser implements MeuParserConstants {
 
   private void jj_rescan_token() {
     jj_rescan = true;
-    for (int i = 0; i < 7; i++) {
+    for (int i = 0; i < 8; i++) {
     try {
       JJCalls p = jj_2_rtns[i];
       do {
@@ -1173,6 +1224,7 @@ public class MeuParser implements MeuParserConstants {
             case 4: jj_3_5(); break;
             case 5: jj_3_6(); break;
             case 6: jj_3_7(); break;
+            case 7: jj_3_8(); break;
           }
         }
         p = p.next;

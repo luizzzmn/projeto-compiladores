@@ -55,18 +55,18 @@ TOKEN :
 /* 3. PALAVRAS RESERVADAS DO C */
 TOKEN :
 {
-  < INTEIRO: "int" >
-| < VAZIO: "void" >
+  < INT: "int" >
+| < VOID: "void" >
 | < CARACTERE: "char" >
-| < FLUTUANTE: "float" >
+| < FLOAT: "float" >
 | < SEM_SINAL: "unsigned" >
 | < LONGO: "long" >         
 | < RETORNO: "return" >
 | < SE: "if" >
 | < SENAO: "else" >
-| < ENQUANTO: "while" >
-| < PARA: "for" >
-| < FACA: "do" >
+| < WHILE: "while" >
+| < FOR: "for" >
+| < DO: "do" >
 | < PARE: "break" >
 | < CONTINUAR: "continue" >
 }
@@ -88,7 +88,7 @@ TOKEN :
 | < MAIOR_IGUAL: ">=" >              
 | < MAIS: "+" >
 | < MENOS: "-" >
-| < MULTIPLICACAO: "*" >          
+| < ASTERISCO: "*" >          
 | < DIVISAO: "/" >
 | < ATRIBUICAO: "=" >
 | < MENOR: "<" >
@@ -110,6 +110,12 @@ TOKEN :
 TOKEN :
 {
   < LITERAL_INTEIRO: (["0"-"9"])+ >
+| < LITERAL_FLUTUANTE: 
+      (["0"-"9"])+ "." (["0"-"9"])* (<EXPONENCIAL>)? (["f","F","l","L"])?
+    | "." (["0"-"9"])+ (<EXPONENCIAL>)? (["f","F","l","L"])?
+    | (["0"-"9"])+ <EXPONENCIAL> (["f","F","l","L"])?
+  >
+| < #EXPONENCIAL: ["e","E"] (["+","-"])? (["0"-"9"])+ >
 | < LITERAL_TEXTO: "\"" (~["\"", "\n", "\r"])* "\"" > 
 | < IDENTIFICADOR: ["a"-"z", "A"-"Z", "_"] (["a"-"z", "A"-"Z", "_", "0"-"9"])* > 
 }
@@ -129,11 +135,11 @@ void Diretiva() : {} {
 }
 
 void DeclaracaoGlobal() : {} {
-  TiposDeDados() (<MULTIPLICACAO>)* <IDENTIFICADOR> ( InstanciarVariavel() | InstanciaFuncao() )
+  TiposDeDados() (<ASTERISCO>)* <IDENTIFICADOR> ( InstanciarVariavel() | InstanciaFuncao() )
 }
 
 void InstanciarVariavel() : {} {
-  ( <ATRIBUICAO> Expressao() )? ( <VIRGULA> (<MULTIPLICACAO>)* <IDENTIFICADOR> ( <ATRIBUICAO> Expressao() )? )* <PONTO_E_VIRGULA>
+  ( <ATRIBUICAO> Expressao() )? ( <VIRGULA> (<ASTERISCO>)* <IDENTIFICADOR> ( <ATRIBUICAO> Expressao() )? )* <PONTO_E_VIRGULA>
 }
 
 void InstanciaFuncao() : {} {
@@ -141,7 +147,7 @@ void InstanciaFuncao() : {} {
 }
 
 void ListaDeParametros() : {} {
-  ( TiposDeDados() (<MULTIPLICACAO>)* <IDENTIFICADOR> ( <VIRGULA> TiposDeDados() (<MULTIPLICACAO>)* <IDENTIFICADOR> )* )?
+  ( TiposDeDados() (<ASTERISCO>)* <IDENTIFICADOR> ( <VIRGULA> TiposDeDados() (<ASTERISCO>)* <IDENTIFICADOR> )* )?
 }
 
 void BlocoDeDeclaracoes() : {} {
@@ -150,23 +156,24 @@ void BlocoDeDeclaracoes() : {} {
 
 void CorpoDaDeclaracao() : {} {
   // O LOOKAHEAD ajuda o parser a decidir entre declarar uma variável (ex: int x;) ou atribuir (ex: x = 1;)
-  LOOKAHEAD(TiposDeDados()) DeclaracaoLocal()
+    LOOKAHEAD(TiposDeDados()) DeclaracaoLocal()
   | AtribuicaoOuChamada()
   | RetornoDaFuncao()
   | Se_Senao()
-  | Enquanto()
-  | Para()
+  | While()
+  | For()
+  | DoWhile()
   | <PARE> <PONTO_E_VIRGULA>
   | <CONTINUAR> <PONTO_E_VIRGULA>
 }
 
 void DeclaracaoLocal() : {} {
-  TiposDeDados() (<MULTIPLICACAO>)* <IDENTIFICADOR> InstanciarVariavel()
+  TiposDeDados() (<ASTERISCO>)* <IDENTIFICADOR> InstanciarVariavel()
 }
 
 // Lida com operações que não necessariamente terminam em ponto-e-vírgula (útil para o FOR)
 void ComandoExpressao() : {} {
-  (<MULTIPLICACAO>)* <IDENTIFICADOR> (
+  (<ASTERISCO>)* <IDENTIFICADOR> (
       <ATRIBUICAO> Expressao()
     | <ATRIBUICAO_SOMA> Expressao()
     | <ATRIBUICAO_SUBTRACAO> Expressao()
@@ -197,26 +204,37 @@ void ComandoBlocoOuUnico() : {} {
   BlocoDeDeclaracoes() | CorpoDaDeclaracao()
 }
 
-void Para() : {} {
-  <PARA> <ABRE_PARENTESES> (ComandoExpressao())? <PONTO_E_VIRGULA> (Expressao())? <PONTO_E_VIRGULA> (ComandoExpressao())? <FECHA_PARENTESES> ComandoBlocoOuUnico()
+void For() : {} {
+  <FOR> <ABRE_PARENTESES> 
+    ( LOOKAHEAD(TiposDeDados()) DeclaracaoLocal() | (ComandoExpressao())? <PONTO_E_VIRGULA> )
+    (Expressao())? <PONTO_E_VIRGULA> 
+    (ComandoExpressao())? 
+  <FECHA_PARENTESES> 
+  ComandoBlocoOuUnico()
 }
 
-void Enquanto() : {} {
-  <ENQUANTO> <ABRE_PARENTESES> Expressao() <FECHA_PARENTESES> ComandoBlocoOuUnico()
+void While() : {} {
+  <WHILE> <ABRE_PARENTESES> Expressao() <FECHA_PARENTESES>
+  ComandoBlocoOuUnico()
+}
+
+void DoWhile() : {} {
+  <DO> <ABRE_CHAVES> ComandoBlocoOuUnico() <FECHA_CHAVES>
+  <WHILE> <ABRE_PARENTESES> Expressao() <FECHA_PARENTESES> <PONTO_E_VIRGULA>
 }
 
 // Mapeia todas as combinações de tipos, incluindo o seu 'unsigned long long'
 void TiposDeDados() : {} {
     LOOKAHEAD(3) <SEM_SINAL> <LONGO> <LONGO>
   | LOOKAHEAD(2) <SEM_SINAL> <LONGO>
-  | LOOKAHEAD(2) <SEM_SINAL> <INTEIRO>
+  | LOOKAHEAD(2) <SEM_SINAL> <INT>
   | <SEM_SINAL>
   | LOOKAHEAD(2) <LONGO> <LONGO>
   | <LONGO>
-  | <INTEIRO>
-  | <FLUTUANTE>
+  | <INT>
+  | <FLOAT>
   | <CARACTERE>
-  | <VAZIO>
+  | <VOID>
 }
 
 void ListaDeArgumentos() : {} {
@@ -236,16 +254,17 @@ void item() : {} {
 }
 
 void termo() : {} {
-  itemUnico() ( ( <MULTIPLICACAO> | <DIVISAO> ) itemUnico() )*
+  itemUnico() ( ( <ASTERISCO> | <DIVISAO> ) itemUnico() )*
 }
 
 void itemUnico() : {} {
   // Lida com operadores unários de C como ponteiros (* e &) e negações (! e -)
-  ( <MAIS> | <MENOS> | <NAO> | <E_BIT_A_BIT> | <MULTIPLICACAO> )* Item()
+  ( <MAIS> | <MENOS> | <NAO> | <E_BIT_A_BIT> | <ASTERISCO> )* Item()
 }
 
 void Item() : {} {
     <LITERAL_INTEIRO>
+  | <LITERAL_FLUTUANTE>
   | <LITERAL_TEXTO>
   // LOOKAHEAD para não confundir uma chamada de função 'nome()' com uma variável solta 'nome'
   | LOOKAHEAD(2) <IDENTIFICADOR> <ABRE_PARENTESES> ListaDeArgumentos() <FECHA_PARENTESES>

@@ -15,13 +15,13 @@ public interface MeuParserConstants {
   /** RegularExpression Id. */
   int BIBLIOTECA_CABECALHO = 8;
   /** RegularExpression Id. */
-  int INTEIRO = 9;
+  int INT = 9;
   /** RegularExpression Id. */
-  int VAZIO = 10;
+  int VOID = 10;
   /** RegularExpression Id. */
   int CARACTERE = 11;
   /** RegularExpression Id. */
-  int FLUTUANTE = 12;
+  int FLOAT = 12;
   /** RegularExpression Id. */
   int SEM_SINAL = 13;
   /** RegularExpression Id. */
@@ -33,11 +33,11 @@ public interface MeuParserConstants {
   /** RegularExpression Id. */
   int SENAO = 17;
   /** RegularExpression Id. */
-  int ENQUANTO = 18;
+  int WHILE = 18;
   /** RegularExpression Id. */
-  int PARA = 19;
+  int FOR = 19;
   /** RegularExpression Id. */
-  int FACA = 20;
+  int DO = 20;
   /** RegularExpression Id. */
   int PARE = 21;
   /** RegularExpression Id. */
@@ -71,7 +71,7 @@ public interface MeuParserConstants {
   /** RegularExpression Id. */
   int MENOS = 36;
   /** RegularExpression Id. */
-  int MULTIPLICACAO = 37;
+  int ASTERISCO = 37;
   /** RegularExpression Id. */
   int DIVISAO = 38;
   /** RegularExpression Id. */
@@ -105,9 +105,13 @@ public interface MeuParserConstants {
   /** RegularExpression Id. */
   int LITERAL_INTEIRO = 53;
   /** RegularExpression Id. */
-  int LITERAL_TEXTO = 54;
+  int LITERAL_FLUTUANTE = 54;
   /** RegularExpression Id. */
-  int IDENTIFICADOR = 55;
+  int EXPONENCIAL = 55;
+  /** RegularExpression Id. */
+  int LITERAL_TEXTO = 56;
+  /** RegularExpression Id. */
+  int IDENTIFICADOR = 57;
 
   /** Lexical state. */
   int DEFAULT = 0;
@@ -168,6 +172,8 @@ public interface MeuParserConstants {
     "\"[\"",
     "\"]\"",
     "<LITERAL_INTEIRO>",
+    "<LITERAL_FLUTUANTE>",
+    "<EXPONENCIAL>",
     "<LITERAL_TEXTO>",
     "<IDENTIFICADOR>",
   };
