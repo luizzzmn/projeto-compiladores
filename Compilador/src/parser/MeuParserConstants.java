@@ -11,27 +11,27 @@ public interface MeuParserConstants {
   /** End of File. */
   int EOF = 0;
   /** RegularExpression Id. */
-  int PREPROCESSOR = 7;
+  int PRE_PROCESSADOR = 7;
   /** RegularExpression Id. */
-  int HEADER_LIB = 8;
+  int BIBLIOTECA_CABECALHO = 8;
   /** RegularExpression Id. */
   int INT = 9;
   /** RegularExpression Id. */
   int VOID = 10;
   /** RegularExpression Id. */
-  int CHAR = 11;
+  int CARACTERE = 11;
   /** RegularExpression Id. */
   int FLOAT = 12;
   /** RegularExpression Id. */
-  int UNSIGNED = 13;
+  int SEM_SINAL = 13;
   /** RegularExpression Id. */
-  int LONG = 14;
+  int LONGO = 14;
   /** RegularExpression Id. */
-  int RETURN = 15;
+  int RETORNO = 15;
   /** RegularExpression Id. */
-  int IF = 16;
+  int SE = 16;
   /** RegularExpression Id. */
-  int ELSE = 17;
+  int SENAO = 17;
   /** RegularExpression Id. */
   int WHILE = 18;
   /** RegularExpression Id. */
@@ -39,75 +39,79 @@ public interface MeuParserConstants {
   /** RegularExpression Id. */
   int DO = 20;
   /** RegularExpression Id. */
-  int BREAK = 21;
+  int PARE = 21;
   /** RegularExpression Id. */
-  int CONTINUE = 22;
+  int CONTINUAR = 22;
   /** RegularExpression Id. */
-  int INCREMENT = 23;
+  int INCREMENTO = 23;
   /** RegularExpression Id. */
-  int DECREMENT = 24;
+  int DECREMENTO = 24;
   /** RegularExpression Id. */
-  int PLUS_ASSIGN = 25;
+  int ATRIBUICAO_SOMA = 25;
   /** RegularExpression Id. */
-  int MINUS_ASSIGN = 26;
+  int ATRIBUICAO_SUBTRACAO = 26;
   /** RegularExpression Id. */
-  int MULTIPLY_ASSIGN = 27;
+  int ATRIBUICAO_MULTIPLICACAO = 27;
   /** RegularExpression Id. */
-  int DIVIDE_ASSIGN = 28;
+  int ATRIBUICAO_DIVISAO = 28;
   /** RegularExpression Id. */
-  int AND = 29;
+  int E_LOGICO = 29;
   /** RegularExpression Id. */
-  int OR = 30;
+  int OU_LOGICO = 30;
   /** RegularExpression Id. */
-  int EQ = 31;
+  int IGUAL = 31;
   /** RegularExpression Id. */
-  int NEQ = 32;
+  int DIFERENTE = 32;
   /** RegularExpression Id. */
-  int LTE = 33;
+  int MENOR_IGUAL = 33;
   /** RegularExpression Id. */
-  int GTE = 34;
+  int MAIOR_IGUAL = 34;
   /** RegularExpression Id. */
-  int PLUS = 35;
+  int MAIS = 35;
   /** RegularExpression Id. */
-  int MINUS = 36;
+  int MENOS = 36;
   /** RegularExpression Id. */
-  int MULTIPLY = 37;
+  int ASTERISCO = 37;
   /** RegularExpression Id. */
-  int DIVIDE = 38;
+  int DIVISAO = 38;
   /** RegularExpression Id. */
-  int ASSIGN = 39;
+  int ATRIBUICAO = 39;
   /** RegularExpression Id. */
-  int LT = 40;
+  int MENOR = 40;
   /** RegularExpression Id. */
-  int GT = 41;
+  int MAIOR = 41;
   /** RegularExpression Id. */
-  int BITWISE_AND = 42;
+  int E_COMERCIAL = 42;
   /** RegularExpression Id. */
-  int BITWISE_OR = 43;
+  int OU_BIT_A_BIT = 43;
   /** RegularExpression Id. */
-  int NOT = 44;
+  int NEGACAO = 44;
   /** RegularExpression Id. */
-  int SEMICOLON = 45;
+  int PONTO_E_VIRGULA = 45;
   /** RegularExpression Id. */
-  int COMMA = 46;
+  int VIRGULA = 46;
   /** RegularExpression Id. */
-  int LPAREN = 47;
+  int ABRE_PARENTESES = 47;
   /** RegularExpression Id. */
-  int RPAREN = 48;
+  int FECHA_PARENTESES = 48;
   /** RegularExpression Id. */
-  int LBRACE = 49;
+  int ABRE_CHAVES = 49;
   /** RegularExpression Id. */
-  int RBRACE = 50;
+  int FECHA_CHAVES = 50;
   /** RegularExpression Id. */
-  int LBRACKET = 51;
+  int ABRE_COLCHETES = 51;
   /** RegularExpression Id. */
-  int RBRACKET = 52;
+  int FECHA_COLCHETES = 52;
   /** RegularExpression Id. */
-  int INTEGER_LITERAL = 53;
+  int LITERAL_INTEIRO = 53;
   /** RegularExpression Id. */
-  int STRING_LITERAL = 54;
+  int LITERAL_FLUTUANTE = 54;
   /** RegularExpression Id. */
-  int IDENTIFIER = 55;
+  int EXPONENCIAL = 55;
+  /** RegularExpression Id. */
+  int LITERAL_TEXTO = 56;
+  /** RegularExpression Id. */
+  int IDENTIFICADOR = 57;
 
   /** Lexical state. */
   int DEFAULT = 0;
@@ -121,8 +125,8 @@ public interface MeuParserConstants {
     "\"\\n\"",
     "<token of kind 5>",
     "<token of kind 6>",
-    "<PREPROCESSOR>",
-    "<HEADER_LIB>",
+    "<PRE_PROCESSADOR>",
+    "<BIBLIOTECA_CABECALHO>",
     "\"int\"",
     "\"void\"",
     "\"char\"",
@@ -167,9 +171,11 @@ public interface MeuParserConstants {
     "\"}\"",
     "\"[\"",
     "\"]\"",
-    "<INTEGER_LITERAL>",
-    "<STRING_LITERAL>",
-    "<IDENTIFIER>",
+    "<LITERAL_INTEIRO>",
+    "<LITERAL_FLUTUANTE>",
+    "<EXPONENCIAL>",
+    "<LITERAL_TEXTO>",
+    "<IDENTIFICADOR>",
   };
 
 }
